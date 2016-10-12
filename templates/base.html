@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Reddit Remake</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" media="screen" title="no title">
+  </head>
+  <body>
+    <div class="container">
+      <a href="{% url 'index_view' %}">Home</a>
+      
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
