@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ object.title }}</h1>
+<h4>{{ object.content }}</h4>
+<br>
+<h5>Posted by: {{ object.relation_user }}</h5>
+<h6>{{ object.creation_time|timesince }} ago</h6>
+<p>
+  {% if object.is_recent %}
+    This post is recent!
+  {% endif %}
+  {% if object.is_hot %}
+    This post is HOT!
+  {% endif %}
+</p>
+{% for comment in object.comment_set.all %}
+  {{ comment.content }}
+{% endfor %}
+{% endblock %}

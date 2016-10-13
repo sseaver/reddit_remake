@@ -8,8 +8,9 @@
   </head>
   <body>
     <div class="container">
-      <a href="{% url 'index_view' %}">Home</a>
-      
+      |<a href="{% url 'index_view' %}"> Home </a>|
+      <a href="{% url 'all_subreddit_view' %}"> All Subreddits </a>|
+
       {% block content %}
       {% endblock %}
     </div>

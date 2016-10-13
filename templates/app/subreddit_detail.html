@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ object.name }}</h1>
+<h4>{{ object.description }}</h4>
+{% for post in object.post_set.all|slice:":20" %}
+<ul class="list-group">
+  <li class="list-group-item">
+    <span class="badge">{{ post.comment_set.count }}</span>
+    <a href="{% url 'post_view' post.id %}">{{ post.title }}</a>
+  </li>
+</ul>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>All Subreddits</h1>
+{% for sub in object_list %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+  <a href="{% url 'subreddit_view' sub.id %}"><h3 class="panel-title">{{ sub.name }}</h3></a>
+  </div>
+  <div class="panel-body">
+    <h5>{{ sub.description }}</h5>{{ sub.current_count }} posts
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

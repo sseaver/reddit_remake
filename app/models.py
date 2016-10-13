@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
-
+from django.utils import timezone
 # Create your models here.
 
 
@@ -11,38 +11,52 @@ class Subreddit(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
 
     def current_count(self):
-        return Post.objects.all().count()
+        return Post.objects.filter(relation_subreddit=self).count()
 
     def today_count(self):
-        return Post.objects.filter(self.creation_time > datetime.timedelta(hours=-24))
+        return Post.objects.filter(creation_time__gt=self.creation_time + datetime.timedelta(hours=-24)).count()
 
     def daily_average(self):
-        past_week = Post.objects.filter(self.creation_time > datetime.timedelta(days=-7))
+        past_week = Post.objects.filter(creation_time__gt=self.creation_time + datetime.timedelta(days=-7)).count()
         return round((past_week / 7), 2)
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=255)
-    url = models.URLField()
+    url = models.URLField(null=True, blank=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
     relation_subreddit = models.ForeignKey(Subreddit)
     relation_user = models.ForeignKey(User)
 
     def is_recent(self):
-        if Post.creation_time < datetime.timedelta(hours=-24):
+        now = timezone.now()
+        if self.creation_time >= now + datetime.timedelta(hours=-24):
+            return True
+        else:
             return False
 
     def is_hot(self):
-        if (Comment.creation_time > datetime.timedelta(hours=-3)).count() >= 3:
+        now = timezone.now()
+        post_comments = Comment.objects.filter(relation_post=self)
+        hot_comments = []
+        for item in post_comments:
+            if item.creation_time >= now + datetime.timedelta(hours=-3):
+                hot_comments.append(item)
+        if len(hot_comments) >= 3:
             return True
+        else:
+            return False
 
     def __str__(self):
-        return str(self.title)
+        return self.title
+
+    class Meta:
+        ordering = ("-creation_time",)
 
 
 class Comment(models.Model):
@@ -53,4 +67,4 @@ class Comment(models.Model):
     modification_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.id)
+        return self.content
