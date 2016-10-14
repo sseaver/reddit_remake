@@ -2,6 +2,8 @@
 {% block content %}
 <h1>{{ object.name }}</h1>
 <h4>{{ object.description }}</h4>
+<h6><a href="{% url 'subreddit_update_view' object.id %}">Update Subreddit</a></h6>
+<h6><a href="{% url 'post_create_view' object.id %}">Create Post</a></h6>
 {% for post in object.post_set.all|slice:":20" %}
 <ul class="list-group">
   <li class="list-group-item">

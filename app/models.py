@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 # Create your models here.
 
 
@@ -68,3 +70,19 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+
+    class Meta:
+        ordering = ("-creation_time",)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField('auth.User')
+    random_fact = models.CharField(max_length=100, null=True)
+
+
+@receiver(post_save, sender='auth.User')
+def create_user_profile(**kwargs):
+    created = kwargs.get('created')
+    instance = kwargs.get('instance')
+    if created:
+        Profile.objects.create(user=instance)

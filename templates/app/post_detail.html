@@ -1,19 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{ object.title }}</h1>
-<h4>{{ object.content }}</h4>
+<h1>{{ post.title }}</h1>
+<h4>{{ post.content }}</h4>
 <br>
-<h5>Posted by: {{ object.relation_user }}</h5>
-<h6>{{ object.creation_time|timesince }} ago</h6>
+<h5>Posted by: {{ post.relation_user }}</h5>
+<h6>{{ post.creation_time|timesince }} ago</h6>
 <p>
-  {% if object.is_recent %}
+  {% if post.is_recent %}
     This post is recent!
-  {% endif %}
-  {% if object.is_hot %}
+  {% endif %}<br>
+  {% if post.is_hot %}
     This post is HOT!
-  {% endif %}
+  {% endif %}<br>
+  <a href="{% url 'post_update_view' post.id %}">Update Post</a>
 </p>
-{% for comment in object.comment_set.all %}
-  {{ comment.content }}
+<form class="" action="" method="post">
+  {% csrf_token %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p>
+        Post a comment!<br>{{ form }}
+      </p>
+      <input class="btn btn-default" type="submit" value="Submit">
+    </div>
+  </div>
+</form>
+{% for comment in post.comment_set.all %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {{ comment.content }}
+    </div>
+    <div class="panel-footer">By: {{ comment.relation_user }}
+      <font size="1">{{ comment.creation_time|timesince }} ago</font>
+      <div class="pull-right">
+        <font size="2"><a href="{% url 'comment_update_view' comment.id %}">Update Comment</font></a>
+      </div>
+    </div>
+  </div>
 {% endfor %}
 {% endblock %}
