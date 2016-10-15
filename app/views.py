@@ -5,6 +5,7 @@ from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from app.forms import CommentForm, PostForm
+
 # Create your views here.
 
 
@@ -92,14 +93,13 @@ class CommentUpdateView(UpdateView):
     fields = ("content",)
 
     def get_success_url(self):
-        post_id = self.kwargs['pk']
-        return "/post/{}/".format(post_id)
+        return "/subreddits/"
 
 
 class UserCreateView(CreateView):
     model = User
     form_class = UserCreationForm
-    success_url = "/chirps"
+    success_url = "/"
 
     def form_valid(self, form):
         instance = form.save(commit=False)

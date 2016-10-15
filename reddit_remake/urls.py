@@ -17,6 +17,6 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/$', PostView.as_view(), name="post_view"),
     url(r'^subreddits/(?P<pk>\d+)/post/create/$', PostCreateView.as_view(), name="post_create_view"),
     url(r'^post/(?P<pk>\d+)/update/$', PostUpdateView.as_view(), name="post_update_view"),
-    url(r'^comment/(?P<pk>\d+)/update/$', CommentUpdateView, name="comment_update_view")
+    url(r'^comment/(?P<pk>\d+)/update/$', CommentUpdateView.as_view(), name="comment_update_view")
 
 ]
