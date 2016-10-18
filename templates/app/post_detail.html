@@ -12,7 +12,9 @@
   {% if post.is_hot %}
     This post is HOT!
   {% endif %}<br>
-  <a href="{% url 'post_update_view' post.id %}">Update Post</a>
+  {% if request.user == post.relation_user %}
+  <font color="#000000"><a href="{% url 'post_update_view' post.id %}">Update Post</a></font>
+  {% endif %}
 </p>
 <form class="" action="" method="post">
   {% csrf_token %}
@@ -32,9 +34,11 @@
     </div>
     <div class="panel-footer">By: {{ comment.relation_user }}
       <font size="1">{{ comment.creation_time|timesince }} ago</font>
+      {% if request.user == comment.relation_user %}
       <div class="pull-right">
         <font size="2"><a href="{% url 'comment_update_view' comment.id %}">Update Comment</font></a>
       </div>
+      {% endif %}
     </div>
   </div>
 {% endfor %}

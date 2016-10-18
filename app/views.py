@@ -5,6 +5,7 @@ from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from app.forms import CommentForm, PostForm
+from django.urls import reverse, reverse_lazy
 
 # Create your views here.
 
@@ -76,7 +77,7 @@ class PostCreateView(CreateView):
 
     def get_success_url(self):
         subreddit_id = self.kwargs['pk']
-        return "/post/{}/".format(subreddit_id)
+        return "/subreddits/{}/".format(subreddit_id)
 
 
 class PostUpdateView(UpdateView):
@@ -91,9 +92,10 @@ class PostUpdateView(UpdateView):
 class CommentUpdateView(UpdateView):
     model = Comment
     fields = ("content",)
+    success_url = reverse_lazy("post_view")
 
-    def get_success_url(self):
-        return "/subreddits/"
+    # def get_success_url(self):
+    #     return "/subreddits/"
 
 
 class UserCreateView(CreateView):
